@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apagar Conta - BettaBase Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-top: 40px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .logo {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+        }
+        
+        h1 {
+            color: #2d3748;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #718096;
+            font-size: 18px;
+        }
+        
+        .warning-box {
+            background: #fff5f5;
+            border: 2px solid #fed7d7;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .warning-icon {
+            color: #c53030;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #4a5568;
+            font-size: 24px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .data-list {
+            list-style: none;
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .data-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .data-item:last-child {
+            border-bottom: none;
+        }
+        
+        .data-label {
+            font-weight: 500;
+            color: #4a5568;
+        }
+        
+        .data-status {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #4a5568;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .confirmation {
+            background: #ebf8ff;
+            border: 2px solid #bee3f8;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-group input {
+            width: 20px;
+            height: 20px;
+            margin-top: 3px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #f56565 0%, #c53030 100%);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(245, 101, 101, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: modalIn 0.3s ease;
+        }
+        
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .success-icon {
+            font-size: 60px;
+            color: #38a169;
+            margin-bottom: 20px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 20px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .data-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">BB</div>
+            <h1>Apagar Conta de Utilizador</h1>
+            <p class="subtitle">BettaBase Management - Pedido de Eliminação de Dados</p>
+        </div>
+        
+        <div class="warning-box">
+            <div class="warning-icon">⚠️</div>
+            <div>
+                <strong>Atenção:</strong> Esta ação é irreversível. Todos os seus dados serão permanentemente apagados do nosso sistema. Este processo pode levar até 30 dias para ser completado.
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Dados que serão apagados</h2>
+            <ul class="data-list">
+                <li class="data-item">
+                    <span class="data-label">Perfil de utilizador</span>
+                    <span class="data-status">Será apagado</span>
+                </li>
+                <li class="data-item">
+                    <span class="data-label">Dados pessoais (email, nome, etc.)</span>
+                    <span class="data-status">Será apagado</span>
+                </li>
+                <li class="data-item">
+                    <span class="data-label">Histórico de atividades</span>
+                    <span class="data-status">Será apagado</span>
+                </li>
+                <li class="data-item">
+                    <span class="data-label">Preferências e configurações</span>
+                    <span class="data-status">Será apagado</span>
+                </li>
+                <li class="data-item">
+                    <span class="data-label">Dados de aquários e peixes</span>
+                    <span class="data-status">Será apagado</span>
+                </li>
+                <li class="data-item">
+                    <span class="data-label">Registos de manutenção</span>
+                    <span class="data-status">Será apagado</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>Informações do Pedido</h2>
+            <form id="deleteForm">
+                <div class="form-group">
+                    <label for="email">Email da conta *</label>
+                    <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="userId">ID de Utilizador (opcional)</label>
+                    <input type="text" id="userId" name="userId" placeholder="Encontre no menu Configurações">
+                </div>
+                
+                <div class="form-group">
+                    <label for="reason">Motivo da eliminação *</label>
+                    <select id="reason" name="reason" required>
+                        <option value="">Selecione um motivo</option>
+                        <option value="privacy">Preocupações com privacidade</option>
+                        <option value="not_using">Não uso mais a aplicação</option>
+                        <option value="alternative">Encontrei uma alternativa</option>
+                        <option value="dissatisfied">Insatisfeito com o serviço</option>
+                        <option value="other">Outro motivo</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="details">Detalhes adicionais (opcional)</label>
+                    <textarea id="details" name="details" rows="4" placeholder="Forneça mais detalhes se desejar..."></textarea>
+                </div>
+                
+                <div class="confirmation">
+                    <h3>Confirmação Final</h3>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="confirmDelete" name="confirmDelete" required>
+                        <label for="confirmDelete">
+                            Confirmo que compreendo que esta ação é irreversível e que todos os meus dados serão permanentemente apagados.
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="confirmBackup" name="confirmBackup" required>
+                        <label for="confirmBackup">
+                            Confirmo que fiz backup de todos os dados importantes que desejo manter.
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="confirmEmail" name="confirmEmail" required>
+                        <label for="confirmEmail">
+                            Confirmo que o email fornecido é o correto e que receberei uma confirmação por email.
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='https://your-app.com'">
+                        ← Voltar à Aplicação
+                    </button>
+                    <button type="submit" class="btn btn-danger" id="submitBtn">
+                        🗑️ Apagar Minha Conta
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal de Confirmação -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="loading" id="loadingSpinner"></div>
+            <div id="successMessage" style="display: none;">
+                <div class="success-icon">✓</div>
+                <h2>Pedido Recebido!</h2>
+                <p>Recebemos o seu pedido de eliminação de conta. Enviámos um email de confirmação para <strong id="userEmail"></strong>.</p>
+                <p>O processo completo pode levar até 30 dias úteis.</p>
+                <button class="btn btn-secondary" onclick="closeModal()" style="margin-top: 20px;">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('deleteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const reason = document.getElementById('reason').value;
+            
+            // Validação básica
+            if (!email || !reason) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            // Mostrar modal
+            const modal = document.getElementById('confirmationModal');
+            const userEmailSpan = document.getElementById('userEmail');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const successMessage = document.getElementById('successMessage');
+            
+            userEmailSpan.textContent = email;
+            modal.style.display = 'flex';
+            
+            // Simular processamento (substitua por chamada real à API)
+            setTimeout(() => {
+                loadingSpinner.style.display = 'none';
+                successMessage.style.display = 'block';
+                
+                // Aqui você enviaria para sua API
+                const formData = {
+                    email: email,
+                    userId: document.getElementById('userId').value,
+                    reason: reason,
+                    details: document.getElementById('details').value,
+                    timestamp: new Date().toISOString(),
+                    status: 'pending'
+                };
+                
+                console.log('Dados para eliminação:', formData);
+                // fetch('/api/delete-account', {
+                //     method: 'POST',
+                //     headers: {'Content-Type': 'application/json'},
+                //     body: JSON.stringify(formData)
+                // });
+            }, 2000);
+        });
+        
+        function closeModal() {
+            const modal = document.getElementById('confirmationModal');
+            modal.style.display = 'none';
+            
+            // Reset do formulário
+            document.getElementById('deleteForm').reset();
+            
+            // Reset modal
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+        
+        // Preencher automaticamente o userId se estiver na URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const userIdFromUrl = urlParams.get('userId');
+        if (userIdFromUrl) {
+            document.getElementById('userId').value = userIdFromUrl;
+        }
+    </script>
+</body>
+</html>
